@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource>
+    <name>GetUpdatedPassSerialNos</name>
+    <resourceType>ae.shared.JMSAppPropResource</resourceType>
+    <config>
+        <Properties>
+            <row>
+                <PropertyName>deviceLibraryId</PropertyName>
+                <Type>string</Type>
+                <Cardinality>required</Cardinality>
+            </row>
+            <row>
+                <PropertyName>passesUpdatedSince</PropertyName>
+                <Type>string</Type>
+                <Cardinality>optional</Cardinality>
+            </row>
+        </Properties>
+    </config>
+</BWSharedResource>

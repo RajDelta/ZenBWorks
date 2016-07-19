@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:tns="http://passbook.zen.ecom.delta.com"
+	 targetNamespace="http://passbook.zen.ecom.delta.com"
+	 elementFormDefault="unqualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="AddPassInfoRequest" type="tns:addPassInfoRequest"/>
+	<xs:element name="AddPassInfoResponse" type="tns:addPassInfoResponse"/>
+	<xs:complexType name="addPassInfoRequest">
+		<xs:sequence>
+			<xs:element name="custId" type="xs:string"/>
+			<xs:element ref="tns:authToken"/>
+			<xs:element ref="tns:serialNumber"/>
+			<xs:element name="recLoc" type="xs:string"/>
+			<xs:element name="origin" type="xs:string"/>
+			<xs:element name="destination" type="xs:string"/>
+			<xs:element name="fltCrrCode" type="xs:string"/>
+			<xs:element name="fltNo" type="xs:string"/>
+			<xs:element name="deptDate" type="xs:dateTime"/>
+			<xs:element ref="tns:passTypeId" minOccurs="0"/>
+			<xs:element ref="tns:deviceId"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="addPassInfoResponse">
+		<xs:sequence>
+			<xs:element ref="tns:error" minOccurs="0"/>
+			<xs:element ref="tns:status"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="RegisterPassDeviceRequest" type="tns:registerPassDeviceRequest"/>
+	<xs:complexType name="registerPassDeviceRequest">
+		<xs:sequence>
+			<xs:element ref="tns:serialNumber"/>
+			<xs:element ref="tns:authToken"/>
+			<xs:element ref="tns:passTypeId" minOccurs="0"/>
+			<xs:element ref="tns:deviceId"/>
+			<xs:element ref="tns:deviceLibraryId"/>
+			<xs:element ref="tns:deviceType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="authToken" type="xs:string"/>
+	<xs:element name="serialNumber" type="xs:string"/>
+	<xs:element name="passTypeId" type="xs:string"/>
+	<xs:element name="deviceLibraryId" type="xs:string"/>
+	<xs:element name="deviceId" type="xs:string"/>
+	<xs:element name="deviceType" type="xs:string"/>
+	<xs:element name="RegisterPassDeviceResponse" type="tns:registerPassDeviceResponse"/>
+	<xs:complexType name="registerPassDeviceResponse">
+		<xs:sequence>
+			<xs:element ref="tns:status"/>
+			<xs:element ref="tns:error" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="status" type="xs:string"/>
+	<xs:element name="error">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="tns:errorCode"/>
+				<xs:element ref="tns:errorMsg"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="errorCode" type="xs:string"/>
+	<xs:element name="errorMsg" type="xs:string"/>
+	<xs:element name="GetUpdatedPassSerialNosRequest" type="tns:getUpdatedPassSerialNosRequest"/>
+	<xs:complexType name="getUpdatedPassSerialNosRequest">
+		<xs:sequence>
+			<xs:element ref="tns:deviceLibraryId"/>
+			<xs:element name="passesUpdatedSince" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="GetUpdatedPassSerialNosResponse" type="tns:getUpdatedPassSerialNosResponse"/>
+	<xs:complexType name="getUpdatedPassSerialNosResponse">
+		<xs:sequence>
+			<xs:element ref="tns:status"/>
+			<xs:element ref="tns:error" minOccurs="0"/>
+			<xs:element name="serialNumbers" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="GetPassInfoRequest" type="tns:getPassInfoRequest"/>
+	<xs:complexType name="getPassInfoRequest">
+		<xs:sequence>
+			<xs:element ref="tns:serialNumber"/>
+			<xs:element ref="tns:authToken"/>
+			<xs:element ref="tns:passTypeId" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="GetPassInfoResponse" type="tns:getPassInfoResponse"/>
+	<xs:complexType name="getPassInfoResponse">
+		<xs:sequence>
+			<xs:element name="custId" type="xs:string"/>
+			<xs:element name="recLoc" type="xs:string"/>
+			<xs:element name="origin" type="xs:string"/>
+			<xs:element name="destination" type="xs:string"/>
+			<xs:element name="deptDate" type="xs:string"/>
+			<xs:element ref="tns:status"/>
+			<xs:element ref="tns:error" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://passbook.zen.ecom.delta.com"
+	 targetNamespace="http://passbook.zen.ecom.delta.com">
+	<xs:element name="GetPassInfoResp">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="serialNumber" type="xs:string"/>
+				<xs:element name="custId" minOccurs="0" type="xs:string"/>				
+				<xs:element name="recLoc" minOccurs="0" type="xs:string"/>				
+				<xs:element name="origin" minOccurs="0" type="xs:string"/>
+				<xs:element name="destination" minOccurs="0" type="xs:string"/>				
+				<xs:element name="deptDate" minOccurs="0" type="xs:string"/>
+				<xs:element name="msgCode" minOccurs="0" type="xs:string"/>
+				<xs:element name="msgText" minOccurs="0" type="xs:string"/>
+				<xs:element name="status" type="xs:string"/>			
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

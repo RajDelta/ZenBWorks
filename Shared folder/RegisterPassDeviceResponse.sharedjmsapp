@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource>
+    <name>RegisterPassDeviceResponse</name>
+    <resourceType>ae.shared.JMSAppPropResource</resourceType>
+    <config>
+        <Properties>
+            <row>
+                <PropertyName>serialNumber</PropertyName>
+                <Type>string</Type>
+                <Cardinality>required</Cardinality>
+            </row>
+            <row>
+                <PropertyName>msgText</PropertyName>
+                <Type>string</Type>
+                <Cardinality>required</Cardinality>
+            </row>
+            <row>
+                <PropertyName>msgCode</PropertyName>
+                <Type>string</Type>
+                <Cardinality>required</Cardinality>
+            </row>
+            <row>
+                <PropertyName>status</PropertyName>
+                <Type>string</Type>
+                <Cardinality>required</Cardinality>
+            </row>
+        </Properties>
+    </config>
+</BWSharedResource>

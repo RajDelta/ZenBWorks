@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx="http://passbook.zen.ecom.delta.com" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:pfx2="http://xmlns.example.com/1467828748383" xmlns:ns="http://www.delta.com/ecom/mobile/zen/schemas" xmlns:wsdlPfx="http://xmlns.example.com/1465395978552" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="http://www.tibco.com/namespaces/tnt/plugins/jms">
+    <xsd:import namespace="http://passbook.zen.ecom.delta.com" schemaLocation="/Schemas/PassBookSvc_schema.xsd"/>
+    <wsdl:import namespace="http://xmlns.example.com/1467828748383" location="/WSDL/PassBookSvc.wsdl"/>
+    <wsdl:import namespace="http://passbook.zen.ecom.delta.com" location="/WSDL/PassbookSvc.wsdl"/>
+    <pd:name>ZenProcess/AddPass.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="pfx:AddPassInfoRequest"/>
+    <pd:startX>151</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnBindings>
+        <pfx:AddPassInfoResponse>
+            <out>
+                <xsl:variable name="var" select="if($_error/ns1:ErrorReport)&#xA;then &quot;Error&quot;&#xA;else    &quot;Success&quot;"/>
+                <pfx:AddPassInfoResponse>
+                    <pfx:error>
+                        <pfx:errorCode>
+                            <xsl:value-of select="if(contains($var,&quot;Error&quot;))&#xA;then $_error/ns1:ErrorReport/MsgCode&#xA;else &quot; &quot;"/>
+                        </pfx:errorCode>
+                        <pfx:errorMsg>
+                            <xsl:value-of select="if(contains($var,&quot;Error&quot;))&#xA;then $_error/ns1:ErrorReport/Msg&#xA;else &quot; &quot;"/>
+                        </pfx:errorMsg>
+                    </pfx:error>
+                    <pfx:status>
+                        <xsl:value-of select="$var"/>
+                    </pfx:status>
+                </pfx:AddPassInfoResponse>
+            </out>
+        </pfx:AddPassInfoResponse>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="pfx:AddPassInfoResponse"/>
+    <pd:endX>608</pd:endX>
+    <pd:endY>71</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://passbook.zen.ecom.delta.com</pd:targetNamespace>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>268</pd:x>
+        <pd:y>62</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat($Start/pfx:AddPassInfoRequest/in/pfx:AddPassInfoRequest/custId,&#xA;$Start/pfx:AddPassInfoRequest/in/pfx:AddPassInfoRequest/pfx:serialNumber,&#xA;$Start/pfx:AddPassInfoRequest/in/pfx:AddPassInfoRequest/pfx:authToken)"/>
+                </message>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JMS Queue Sender">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>430</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <PermittedMessageType>Simple</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%ZenGlobalVariables/PassbookVariables/ZenAddPassQueueName%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Shared folder/ZenBEQueueConnection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/Shared folder/AddPassInfo.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings>
+            <ns3:ActivityInput>
+                <OtherProperties>
+                    <custId>
+                        <xsl:value-of select="$Start/pfx:AddPassInfoRequest/in/pfx:AddPassInfoRequest/custId"/>
+                    </custId>
+                    <serialNumber>
+                        <xsl:value-of select="$Start/pfx:AddPassInfoRequest/in/pfx:AddPassInfoRequest/pfx:serialNumber"/>
+                    </serialNumber>
+                    <authToken>
+                        <xsl:value-of select="$Start/pfx:AddPassInfoRequest/in/pfx:AddPassInfoRequest/pfx:authToken"/>
+                    </authToken>
+                    <passTypeId>
+                        <xsl:value-of select="$Start/pfx:AddPassInfoRequest/in/pfx:AddPassInfoRequest/pfx:passTypeId"/>
+                    </passTypeId>
+                    <deviceId>
+                        <xsl:value-of select="$Start/pfx:AddPassInfoRequest/in/pfx:AddPassInfoRequest/pfx:deviceId"/>
+                    </deviceId>
+                    <recLoc>
+                        <xsl:value-of select="$Start/pfx:AddPassInfoRequest/in/pfx:AddPassInfoRequest/recLoc"/>
+                    </recLoc>
+                    <origin>
+                        <xsl:value-of select="$Start/pfx:AddPassInfoRequest/in/pfx:AddPassInfoRequest/origin"/>
+                    </origin>
+                    <destination>
+                        <xsl:value-of select="$Start/pfx:AddPassInfoRequest/in/pfx:AddPassInfoRequest/destination"/>
+                    </destination>
+                    <fltCrrCode>
+                        <xsl:value-of select="$Start/pfx:AddPassInfoRequest/in/pfx:AddPassInfoRequest/fltCrrCode"/>
+                    </fltCrrCode>
+                    <fltNo>
+                        <xsl:value-of select="$Start/pfx:AddPassInfoRequest/in/pfx:AddPassInfoRequest/fltNo"/>
+                    </fltNo>
+                    <deptDate>
+                        <xsl:value-of select="tib:format-dateTime('yyyyMMdd',$Start/pfx:AddPassInfoRequest/in/pfx:AddPassInfoRequest/deptDate)"/>
+                    </deptDate>
+                </OtherProperties>
+            </ns3:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>218</pd:x>
+        <pd:y>244</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Log-1">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>430</pd:x>
+        <pd:y>241</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="$Catch/exceptiondata/*"/>
+                </message>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>JMS Queue Sender</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Sender</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Log-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

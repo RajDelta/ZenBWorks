@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://passbook.zen.ecom.delta.com" targetNamespace="http://passbook.zen.ecom.delta.com">
+    <import namespace="http://passbook.zen.ecom.delta.com" location="Schemas/PassBookSvc_schema.xsd"/>
+    <import namespace="http://passbook.zen.ecom.delta.com" location="../Schemas/PassBookSvc_schema.xsd"/>
+    <message name="AddPassInfoRequest">
+        <part name="in" element="tns:AddPassInfoRequest"/>
+    </message>
+    <message name="AddPassInfoResponse">
+        <part name="out" element="tns:AddPassInfoResponse"/>
+    </message>
+    <message name="RegisterPassDeviceRequest">
+        <part name="in" element="tns:RegisterPassDeviceRequest"/>
+    </message>
+    <message name="RegisterPassDeviceResponse">
+        <part name="out" element="tns:RegisterPassDeviceResponse"/>
+    </message>
+    <message name="GetUpdatedPassSerialNosRequest">
+        <part name="in" element="tns:GetUpdatedPassSerialNosRequest"/>
+    </message>
+    <message name="GetUpdatedPassSerialNosResponse">
+        <part name="out" element="tns:GetUpdatedPassSerialNosResponse"/>
+    </message>
+    <message name="GetPassInfoRequest">
+        <part name="in" element="tns:GetPassInfoRequest"/>
+    </message>
+    <message name="GetPassInfoResponse">
+        <part name="out" element="tns:GetPassInfoResponse"/>
+    </message>
+    <portType name="PassBookSvc">
+        <operation name="addPass">
+            <input message="tns:AddPassInfoRequest"/>
+            <output message="tns:AddPassInfoResponse"/>
+        </operation>
+        <operation name="registerPassDevice">
+            <input message="tns:RegisterPassDeviceRequest"/>
+            <output message="tns:RegisterPassDeviceResponse"/>
+        </operation>
+        <operation name="getUpdatedPassSerialNos">
+            <input message="tns:GetUpdatedPassSerialNosRequest"/>
+            <output message="tns:GetUpdatedPassSerialNosResponse"/>
+        </operation>
+        <operation name="getPassInfo">
+            <input message="tns:GetPassInfoRequest"/>
+            <output message="tns:GetPassInfoResponse"/>
+        </operation>
+    </portType>
+</definitions>

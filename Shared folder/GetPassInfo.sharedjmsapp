@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource>
+    <name>GetPassInfo</name>
+    <resourceType>ae.shared.JMSAppPropResource</resourceType>
+    <config>
+        <Properties>
+            <row>
+                <PropertyName>serialNumber</PropertyName>
+                <Type>string</Type>
+                <Cardinality>required</Cardinality>
+            </row>
+            <row>
+                <PropertyName>authToken</PropertyName>
+                <Type>string</Type>
+                <Cardinality>required</Cardinality>
+            </row>
+            <row>
+                <PropertyName>passTypeId</PropertyName>
+                <Type>string</Type>
+                <Cardinality>optional</Cardinality>
+            </row>
+        </Properties>
+    </config>
+</BWSharedResource>

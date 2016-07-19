@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://passbook.zen.ecom.delta.com"
+	 targetNamespace="http://passbook.zen.ecom.delta.com">
+	 <xs:element name="PassSerialNumbersInfo">
+	 	<xs:complexType>
+			<xs:sequence>
+				<xs:element name="deviceLibraryId" type="xs:string"/>				
+            	<xs:element name="serialNumbers" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>          			 			
+    			<xs:element name="lastUpdated" minOccurs="0" type="xs:string"/>
+    			<xs:element name="msgCode" minOccurs="0" type="xs:string"/>
+    			<xs:element name="msgText" minOccurs="0" type="xs:string"/>
+    			<xs:element name="status" minOccurs="0" type="xs:string"/>
+    		</xs:sequence>
+		</xs:complexType>
+    </xs:element>
+</xs:schema>

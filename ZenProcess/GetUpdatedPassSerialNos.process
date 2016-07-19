@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://passbook.zen.ecom.delta.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="http://www.tibco.com/pe/SignalInActivitySchema">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://passbook.zen.ecom.delta.com" schemaLocation="/Schemas/PassSerialNumbersInfo.xsd"/>
+    <wsdl:import namespace="http://passbook.zen.ecom.delta.com" location="/WSDL/PassbookSvc.wsdl"/>
+    <pd:name>ZenProcess/GetUpdatedPassSerialNos.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="pfx:GetUpdatedPassSerialNosRequest"/>
+    <pd:startX>71</pd:startX>
+    <pd:startY>100</pd:startY>
+    <pd:returnBindings>
+        <pfx:GetUpdatedPassSerialNosResponse>
+            <out>
+                <pfx:GetUpdatedPassSerialNosResponse>
+                    <xsl:choose>
+                        <xsl:when test="$_error/ns4:ErrorReport">
+                            <pfx:status>
+                                <xsl:value-of select="&quot;ERROR&quot;"/>
+                            </pfx:status>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx:status>
+                                <xsl:value-of select="$Wait-for-JMS-Queue-Message/ns2:ActivityOutput/Body/pfx:PassSerialNumbersInfo/status"/>
+                            </pfx:status>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:choose>
+                        <xsl:when test="$_error/ns4:ErrorReport">
+                            <pfx:error>
+                                <pfx:errorCode>
+                                    <xsl:value-of select="$_error/ns4:ErrorReport/MsgCode"/>
+                                </pfx:errorCode>
+                                <pfx:errorMsg>
+                                    <xsl:value-of select="$_error/ns4:ErrorReport/Msg"/>
+                                </pfx:errorMsg>
+                            </pfx:error>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx:error>
+                                <pfx:errorCode>
+                                    <xsl:value-of select="$Wait-for-JMS-Queue-Message/ns2:ActivityOutput/Body/pfx:PassSerialNumbersInfo/msgCode"/>
+                                </pfx:errorCode>
+                                <pfx:errorMsg>
+                                    <xsl:value-of select="$Wait-for-JMS-Queue-Message/ns2:ActivityOutput/Body/pfx:PassSerialNumbersInfo/msgText"/>
+                                </pfx:errorMsg>
+                            </pfx:error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:for-each select="$Wait-for-JMS-Queue-Message/ns2:ActivityOutput/Body/pfx:PassSerialNumbersInfo/serialNumbers">
+                        <serialNumbers>
+                            <xsl:value-of select="."/>
+                        </serialNumbers>
+                    </xsl:for-each>
+                </pfx:GetUpdatedPassSerialNosResponse>
+            </out>
+        </pfx:GetUpdatedPassSerialNosResponse>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="pfx:GetUpdatedPassSerialNosResponse"/>
+    <pd:endX>650</pd:endX>
+    <pd:endY>125</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1468510295039</pd:targetNamespace>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>171</pd:x>
+        <pd:y>103</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="$Start/pfx:GetUpdatedPassSerialNosRequest/in/pfx:GetUpdatedPassSerialNosRequest/pfx:deviceLibraryId"/>
+                </message>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JMS Queue Sender">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>299</pd:x>
+        <pd:y>100</pd:y>
+        <config>
+            <PermittedMessageType>Simple</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%ZenGlobalVariables/PassbookVariables/ZenGetUpdatedPassNosQueueName%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Shared folder/ZenBEQueueConnection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/Shared folder/GetUpdatedPassSerialNos.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <OtherProperties>
+                    <deviceLibraryId>
+                        <xsl:value-of select="$Start/pfx:GetUpdatedPassSerialNosRequest/in/pfx:GetUpdatedPassSerialNosRequest/pfx:deviceLibraryId"/>
+                    </deviceLibraryId>
+                    <xsl:if test="$Start/pfx:GetUpdatedPassSerialNosRequest/in/pfx:GetUpdatedPassSerialNosRequest/passesUpdatedSince">
+                        <passesUpdatedSince>
+                            <xsl:value-of select="$Start/pfx:GetUpdatedPassSerialNosRequest/in/pfx:GetUpdatedPassSerialNosRequest/passesUpdatedSince"/>
+                        </passesUpdatedSince>
+                    </xsl:if>
+                </OtherProperties>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Wait for JMS Queue Message">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSignalInActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSignalInActivity</pd:resourceType>
+        <pd:x>473</pd:x>
+        <pd:y>117</pd:y>
+        <config>
+            <_eventTimeout>60000</_eventTimeout>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>-1</maxSessions>
+                <destination>%%ZenGlobalVariables/PassbookVariables/ZenGetUpdatedPassNosRespQueueName%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Shared folder/ZenBEQueueConnection.sharedjmscon</ConnectionReference>
+            <_filter>ns2:ActivityOutput/Body/pfx:PassSerialNumbersInfo/deviceLibraryId</_filter>
+            <OutDataxsdString ref="pfx:PassSerialNumbersInfo"/>
+        </config>
+        <pd:inputBindings>
+            <ns3:input>
+                <key>
+                    <xsl:value-of select="$Start/pfx:GetUpdatedPassSerialNosRequest/in/pfx:GetUpdatedPassSerialNosRequest/pfx:deviceLibraryId"/>
+                </key>
+                <processTimeout>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/ZenGlobalVariables/PassbookVariables/ZenBERespMsgTimeOut"/>
+                </processTimeout>
+            </ns3:input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>294</pd:x>
+        <pd:y>275</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Log-1">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>469</pd:x>
+        <pd:y>256</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="$Catch/exceptiondata/*"/>
+                </message>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>JMS Queue Sender</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Sender</pd:from>
+        <pd:to>Wait for JMS Queue Message</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Wait for JMS Queue Message</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Log-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

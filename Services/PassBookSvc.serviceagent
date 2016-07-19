@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serviceResource xmlns:wsdl="http://passbook.zen.ecom.delta.com">
+    <ns0:import xmlns:ns0="http://schemas.xmlsoap.org/wsdl/" namespace="http://passbook.zen.ecom.delta.com" location="/WSDL/PassbookSvc.wsdl"/>
+    <config>
+        <class>com.tibco.bw.service.serviceAgent.ServiceServiceAgent</class>
+        <name>PassBookSvc</name>
+        <resourceType>service.definition</resourceType>
+        <implType>bw</implType>
+        <groups>
+            <row isDefault="true" groupName="Default"/>
+        </groups>
+        <serviceChange>Tue Jul 19 09:47:26 EDT 2016</serviceChange>
+        <wsdl namespace="http://passbook.zen.ecom.delta.com" embedWsdlComponents="true" embedSchemaComponents="true" embedJndiProperties="false"/>
+        <interfaceImpl>
+            <tab>
+                <tabName>PassBookSvc</tabName>
+                <tabType>bw</tabType>
+                <config>
+                    <wsdlDetail location="/WSDL/PassbookSvc.wsdl" portType="PassBookSvc" ns="http://passbook.zen.ecom.delta.com"/>
+                    <detail>
+                        <tab>
+                            <tabName>service.definition.impl.tab.label</tabName>
+                            <tabType>impl</tabType>
+                            <config>
+                                <operations>
+                                    <row opName="addPass" opImpl="/ZenProcess/AddPass.process"/>
+                                    <row opName="registerPassDevice" opImpl="/ZenProcess/RegisterPassDevice.process"/>
+                                    <row opName="getUpdatedPassSerialNos" opImpl="/ZenProcess/GetUpdatedPassSerialNos.process"/>
+                                    <row opName="getPassInfo" opImpl="/ZenProcess/GetPassInfo.process"/>
+                                </operations>
+                            </config>
+                        </tab>
+                        <tab>
+                            <tabName>service.definition.ep.tab.label</tabName>
+                            <tabType>ep</tabType>
+                            <config>
+                                <epBindings>
+                                    <row epName="PassBookSvc" epType="soap">
+                                        <config>
+                                            <epDetail>
+                                                <tab>
+                                                    <tabName>soap.service.transport.ui.transport.tab.label</tabName>
+                                                    <tabType>transport</tabType>
+                                                    <config>
+                                                        <sharedChannel>/Shared folder/RegisterSvc.sharedhttp</sharedChannel>
+                                                        <transport>
+                                                            <config>
+                                                                <useBasicAuthentication>false</useBasicAuthentication>
+                                                                <httpURI>mobileebp/PassBookSvc</httpURI>
+                                                            </config>
+                                                        </transport>
+                                                    </config>
+                                                </tab>
+                                                <tab>
+                                                    <tabName>soap.service.transport.ui.details.tab.label</tabName>
+                                                    <tabType>details</tabType>
+                                                    <config>
+                                                        <operationStyle>document</operationStyle>
+                                                        <soapVersion>SOAP 1.1</soapVersion>
+                                                        <soap>
+                                                            <operation name="addPass">
+                                                                <general>
+                                                                    <config>
+                                                                        <soapAction>mobileebp/PassBookSvc</soapAction>
+                                                                        <operationStyle/>
+                                                                        <soapUse>literal</soapUse>
+                                                                        <inputNamespace/>
+                                                                        <outputNamespace/>
+                                                                        <faultNamespace/>
+                                                                        <portAddressPrefix/>
+                                                                    </config>
+                                                                </general>
+                                                            </operation>
+                                                            <operation name="registerPassDevice">
+                                                                <general>
+                                                                    <config>
+                                                                        <soapAction>/Services/PassBookSvc.serviceagent//registerPassDevice</soapAction>
+                                                                        <operationStyle/>
+                                                                        <soapUse>literal</soapUse>
+                                                                    </config>
+                                                                </general>
+                                                            </operation>
+                                                            <operation name="getUpdatedPassSerialNos">
+                                                                <general>
+                                                                    <config>
+                                                                        <soapAction>/Services/PassBookSvc.serviceagent//getUpdatedPassSerialNos</soapAction>
+                                                                        <operationStyle/>
+                                                                        <soapUse>literal</soapUse>
+                                                                    </config>
+                                                                </general>
+                                                            </operation>
+                                                            <operation name="getPassInfo">
+                                                                <general>
+                                                                    <config>
+                                                                        <soapAction>/Services/PassBookSvc.serviceagent//getPassInfo</soapAction>
+                                                                        <operationStyle/>
+                                                                        <soapUse>literal</soapUse>
+                                                                    </config>
+                                                                </general>
+                                                            </operation>
+                                                        </soap>
+                                                    </config>
+                                                </tab>
+                                            </epDetail>
+                                        </config>
+                                    </row>
+                                </epBindings>
+                            </config>
+                        </tab>
+                    </detail>
+                </config>
+            </tab>
+        </interfaceImpl>
+    </config>
+</serviceResource>

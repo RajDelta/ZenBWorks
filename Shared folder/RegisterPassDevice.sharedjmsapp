@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource>
+    <name>RegisterPassDevice</name>
+    <resourceType>ae.shared.JMSAppPropResource</resourceType>
+    <description/>
+    <config>
+        <Properties>
+            <row>
+                <PropertyName>serialNumber</PropertyName>
+                <Type>string</Type>
+                <Cardinality>required</Cardinality>
+            </row>
+            <row>
+                <PropertyName>authToken</PropertyName>
+                <Type>string</Type>
+                <Cardinality>required</Cardinality>
+            </row>
+            <row>
+                <PropertyName>deviceId</PropertyName>
+                <Type>string</Type>
+                <Cardinality>required</Cardinality>
+            </row>
+            <row>
+                <PropertyName>passTypeId</PropertyName>
+                <Type>string</Type>
+                <Cardinality>optional</Cardinality>
+            </row>
+            <row>
+                <PropertyName>deviceLibraryId</PropertyName>
+                <Type>string</Type>
+                <Cardinality>required</Cardinality>
+            </row>
+            <row>
+                <PropertyName>deviceType</PropertyName>
+                <Type>string</Type>
+                <Cardinality>required</Cardinality>
+            </row>
+        </Properties>
+    </config>
+</BWSharedResource>
